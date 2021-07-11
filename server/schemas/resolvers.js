@@ -49,11 +49,14 @@ const resolvers = {
                 { $addToSet: { savedBooks: book._id } }
             )
         },
-        removeBook: async() => {
-
-        }
+        removeBook: async (parent, { userId, bookId }) => {
+            return User.findOneAndUpdate(
+                { _id: userId },
+                { $pull: { savedBooks: { bookId: bookId } } },
+                { new: true }
+            );
+        },
     }
-    
 }
 
 
