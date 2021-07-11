@@ -19,14 +19,11 @@ const resolvers = {
            const params = username ? { username } : {};
            return Book.find(params);
        },
-       book: async (parent, { bookId }) => {
-            return Book.findOne({ _id: bookId });
-       }
     },
 
 
     Mutation: {
-        createUser: async (parent, { username, email, password}) => {
+        addUser: async (parent, { username, email, password}) => {
             const user = User.create({ username, email, password });
             const token = signToken(user);
             return { token, user };
@@ -45,10 +42,14 @@ const resolvers = {
             const token = signToken(user);
             return { token, user};
         },
-        saveBook: async () => {
-            
+        saveBook: async (parent, { user } ) => {
+            console.log(user);
+            await User.findOneAndUpdate(
+                { username },
+                { $addToSet: { savedBooks: book._id } }
+            )
         },
-        deleteBook: async() => {
+        removeBook: async() => {
 
         }
     }
