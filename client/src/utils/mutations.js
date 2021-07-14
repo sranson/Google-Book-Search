@@ -15,9 +15,20 @@ mutation login($email: String!, $password: String!) {
 `;
 
 
-
-
 // ADD_USER will execute the addUser mutation.
+export const ADD_USER = gql`
+mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        username
+        email
+      }
+    }
+  }
+`;
+
+
 
 // SAVE_BOOK will execute the saveBook mutation.
 
