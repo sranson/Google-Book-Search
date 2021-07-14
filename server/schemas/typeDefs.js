@@ -64,3 +64,9 @@ module.exports = typeDefs;
 //     "email": "salome@gmail.com",
 //     "password": "password"
 //   }
+
+
+// {
+//     "userId": "60eb49fcbd4ee7219b9dee8e",
+//     "bookId": "3C-4dsIGlEgC"
+//   }

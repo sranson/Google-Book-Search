@@ -74,12 +74,15 @@ const resolvers = {
         },
 
 
-        removeBook: async (parent, { userId, Book }) => {
-            return User.findOneAndUpdate(
-                { _id: userId },
-                { $pull: { savedBooks: { bookId: Book } } },
-                { new: true }
-            );
+        removeBook: async (parent, { userId, bookId }, context) => {
+            if (context.user) {
+                return User.findOneAndUpdate(
+                    { _id: userId },
+                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { new: true }
+                );
+            }
+            throw new AuthenticationError('You need to be logged in!');
         },
     }
 }
