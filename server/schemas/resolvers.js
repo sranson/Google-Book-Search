@@ -12,8 +12,8 @@ const resolvers = {
        users: async () => {
            return User.find().populate('books');
        }, 
-       user: async (parent, { username }) => {
-           return User.findOne({ username }).populate('books');
+       me: async (parent, { userId }) => {
+           return User.findOne({ _id: userId }).populate('books');
        },
        books: async(parent, { username }) => {
            const params = username ? { username } : {};
