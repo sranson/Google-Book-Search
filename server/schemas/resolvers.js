@@ -12,16 +12,16 @@ const resolvers = {
        users: async () => {
            return User.find().populate('books');
        }, 
+       
        me: async (parent, args, context) => {
         if (context.user) {
-            return User.findOne({ _id: userId }).populate('books');
+            return User.findById({ _id: userId }).populate('books');
         }
         throw new AuthenticationError('You need to be logged in!');
       },
-       books: async(parent, { username }) => {
-           const params = username ? { username } : {};
-           return Book.find(params);
-       },
+       savedBooks: async(parent, { userId }) => {
+        return User.findById({ _id: userId }).populate('books');
+       }
     },
 
 
