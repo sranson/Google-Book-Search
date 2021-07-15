@@ -56,12 +56,12 @@ const resolvers = {
         },
 
         // Add a third argument to the resolver to access data in our `context`
-        saveBook: async (parent, { userId, authors, description, title, bookId, image, link }, context) => {
+        saveBook: async (parent, { userId, bookData }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
                     { _id: userId },
                     { 
-                        $addToSet: { savedBooks: authors, description, title, bookId, image, link } 
+                        $addToSet: { savedBooks: bookData } 
                     },
                     {
                         new: true,
@@ -72,8 +72,6 @@ const resolvers = {
             // If user attempts to execute this mutation and isn't logged in, throw an error
             throw new AuthenticationError('You need to be logged in!');
         },
-
-
         removeBook: async (parent, { userId, bookId }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
