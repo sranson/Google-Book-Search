@@ -31,11 +31,11 @@ mutation addUser($username: String!, $email: String!, $password: String!) {
 
 // SAVE_BOOK will execute the saveBook mutation.
 export const SAVE_BOOK = gql`
-mutation saveBook ($userId: ID!, $bookData: String!) {
-  saveBook(userId: $userId, bookData: $bookData ) {
-		_id
+mutation saveBook($userId:ID!, $bookId: ID!, $authors: [String], $description: String!, $title: String!, $image: String!, $link: String!) {
+  saveBook(userId: $userId, bookId:$bookId, authors: $authors, description:$description, title:$title, image:$image, link:$link) {
+    _id
     username
- 		savedBooks {
+    savedBooks{
       title
     }
   }
