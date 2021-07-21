@@ -39,9 +39,7 @@ const typeDefs = gql`
     }
     
     type Query {
-        me(userId: ID!): User
-        users: [User]
-        savedBooks(userId: ID!): User
+        me: User
     }
 
 
