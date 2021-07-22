@@ -9,13 +9,19 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
+        Users: async() => {
+            const allUsers = await User.find({})
+            return allUsers;
+        },
        me: async (parent, args, context) => {
+        console.log(`User Context: ${context.user}`);
         if (context.user) {
             const userDetails = await User.findOne({ _id: context.user._id })
+            console.log(`USER DETAILS: ${userDetails}`);
             return userDetails;
         }
-        throw new AuthenticationError('You need to be logged in!');
-      },
+        throw new AuthenticationError('YOU NEED TO BE LOGGED IN');
+      }
     },
 
 
@@ -47,22 +53,27 @@ const resolvers = {
 
             // If email and password are correct, sign user into the application with a JWT
             const token = signToken(user);
-
             // Return an `Auth` object that consists of the signed token and user's information
             return { token, user};
         },
 
         // Add a third argument to the resolver to access data in our `context`
-        saveBook: async (parent, { bookData }, context) => {
-            console.log(context)
+        saveBook: async (parent, { bookId, authors, description, title, image, link }, context) => {
             if (context.user) {
+                console.log(`USER ID: ${context.user._id}`)
+                console.log(`USERNAME: ${context.user.username}`)
+                console.log(`EMAIL: ${context.user.email}`)
+                console.log(`BOOK ID: ${bookId}`);
+                console.log(`BOOK Title: ${title}`);
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: bookId, authors, description, title, image } },
+                    { $addToSet: { savedBooks: {bookId: bookId, authors: authors, description: description, title: title, image: image, link: link } } },
                     { new: true, runValidators: true }
                 );
-            // If user attempts to execute this mutation and isn't logged in, throw an error
-            throw new AuthenticationError('You need to be logged in!');
+                return updatedUser
+            } else {
+                // If user attempts to execute this mutation and isn't logged in, throw an error
+                throw new AuthenticationError('You need to be logged in!');
             }
         },
         removeBook: async (parent, { bookId }, context) => {
