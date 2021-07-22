@@ -21,6 +21,8 @@ export const removeBookId = (bookId) => {
 
   if (!savedBookIds) {
     return false;
+  } else {
+    localStorage.removeItem('bookId')
   }
 
   const updatedSavedBookIds = savedBookIds?.filter((savedBookId) => savedBookId !== bookId);

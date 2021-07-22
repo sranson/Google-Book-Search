@@ -14,13 +14,13 @@ const resolvers = {
             return allUsers;
         },
        me: async (parent, args, context) => {
-        console.log(`User Context: ${context.user}`);
         if (context.user) {
             const userDetails = await User.findOne({ _id: context.user._id })
-            console.log(`USER DETAILS: ${userDetails}`);
             return userDetails;
+        } else {
+            throw new AuthenticationError('YOU NEED TO BE LOGGED IN');
         }
-        throw new AuthenticationError('YOU NEED TO BE LOGGED IN');
+
       }
     },
 
@@ -60,11 +60,6 @@ const resolvers = {
         // Add a third argument to the resolver to access data in our `context`
         saveBook: async (parent, { bookId, authors, description, title, image, link }, context) => {
             if (context.user) {
-                console.log(`USER ID: ${context.user._id}`)
-                console.log(`USERNAME: ${context.user.username}`)
-                console.log(`EMAIL: ${context.user.email}`)
-                console.log(`BOOK ID: ${bookId}`);
-                console.log(`BOOK Title: ${title}`);
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $addToSet: { savedBooks: {bookId: bookId, authors: authors, description: description, title: title, image: image, link: link } } },
